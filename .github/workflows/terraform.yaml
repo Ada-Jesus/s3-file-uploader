@@ -3,8 +3,9 @@ name: 'Terraform'
 on:
   push:
     branches: [ "dev" ]
-  pull_request:
 
+  pull_request:
+   # branches: [ "dev" ]
 permissions:
   contents: read
 
@@ -50,7 +51,7 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -input=false -compact-warnings
 
-    
+    # Apply Terraform only on push to dev branch
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/"dev"' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
