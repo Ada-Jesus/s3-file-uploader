@@ -31,5 +31,5 @@ variable "lambda_function_name" {
 variable  "s3_bucket_prefix" {
   type        = string
   description = "the prefix name of the S3 buckets for uploads and proceesed file"
-  default     = "cloudcore-s3-file"
+  default     = "guac-s3-file"
 }
