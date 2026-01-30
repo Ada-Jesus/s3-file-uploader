@@ -1,19 +1,18 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 5.25.0"
+terraform { 
+    required_providers { 
+        aws = {
+          source = "hashicorp/aws"
+          version = ">=5.25"
+        }
     }
-  }
+  backend "remote" { 
+    organization = "cloudioworkspace" 
 
-  backend "remote" {
-    organization = "cloudcore-org"
-
-    workspaces {
-      name = "cloudcore"
-    }
-  }
-  required_version = ">= 1.6.3"
+    workspaces { 
+      name = "s3-uploader" 
+    } 
+  } 
+  required_version = ">=1.6.3"
 }
 
 provider "aws" {

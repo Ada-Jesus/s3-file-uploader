@@ -1,10 +1,9 @@
 name: 'Terraform'
 
 on:
-  # push:
-  #   branches: [ "master" ]  
+  push:
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "master" ]  
 
 permissions:
   contents: read
@@ -13,30 +12,32 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: demo
+    environment: production
 
     defaults:
       run:
         shell: bash
-        working-directory: ./terraform
+        working-directory: .terraform
 
     steps:
+    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Add a step to package the Lambda function
-    - name: Package Lambda Function
+    - name: Packege Lambda Function
       run: |
         cd ../lambda
         zip -r9 lambda_function_payload.zip lambda_function.py
-        mv lambda_function_payload.zip ../terraform/
+        mv lambda_function_payload.zip ../terraform
         cd ../terraform
+       
 
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+      uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+   
     - name: Terraform Init
       run: terraform init
 
@@ -44,13 +45,10 @@ jobs:
       run: terraform fmt -check
       continue-on-error: true
 
-    - name: Terraform Validate
-      run: terraform validate
-
     - name: Terraform Plan
-      run: terraform plan -no-color -input=false
-      continue-on-error: true 
+      run: terraform plan -input=false
 
+    
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false 
+      if: github.ref == 'refs/heads/"dev"' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
