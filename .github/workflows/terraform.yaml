@@ -17,7 +17,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: .terraform
+        working-directory: ./terraform
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -28,7 +28,7 @@ jobs:
       run: |
         cd ../lambda
         zip -r9 lambda_function_payload.zip lambda_function.py
-        mv lambda_function_payload.zip ../terraform
+        mv lambda_function_payload.zip ../terraform/
         cd ../terraform
        
 
